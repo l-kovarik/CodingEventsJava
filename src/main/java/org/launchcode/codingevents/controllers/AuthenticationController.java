@@ -9,9 +9,9 @@ import org.launchcode.codingevents.models.dto.LoginFormDTO;
 import org.launchcode.codingevents.models.dto.RegisterFormDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -30,19 +30,18 @@ public class AuthenticationController {
         if (userId == null) {
             return null;
         }
-
         Optional<User> user = userRepository.findById(userId);
-
         if (user.isEmpty()) {
             return null;
         }
 
         return user.get();
     }
-
     private static void setUserInSession(HttpSession session, User user) {
         session.setAttribute(userSessionKey, user.getId());
     }
+
+    //register a user
 
     @GetMapping("/register")
     public String displayRegistrationForm(Model model) {
@@ -84,6 +83,7 @@ public class AuthenticationController {
         return "redirect:";
     }
 
+    // the login form
     @GetMapping("/login")
     public String displayLoginForm(Model model) {
         model.addAttribute(new LoginFormDTO());
@@ -122,6 +122,7 @@ public class AuthenticationController {
         return "redirect:";
     }
 
+    //log out
     @GetMapping("/logout")
     public String logout(HttpServletRequest request){
         request.getSession().invalidate();
